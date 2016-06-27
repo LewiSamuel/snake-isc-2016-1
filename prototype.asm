@@ -17,14 +17,14 @@ sair_ranking: .asciiz "Tecle 'x' para sair do ranking.\n"
 byebye: .asciiz "Bye-Bye...\n"
 .text
 
-# 0xFF012C00 - 0x140 == um dos endereços que devem ser printados como borda (bordas LATERAIS)
+# 0xFF012C00 - 0x140 == um dos endereÃ§os que devem ser printados como borda (bordas LATERAIS)
 # 0xFF000000 + 0x140 == primeiro dos elementos a fazer parte da borda lateral DIREITA
 
 
 
 JOGAR:
 	li $s0,0xFF000000
-	li $t0,0xFF000000	#Endereços da memória de vídeo
+	li $t0,0xFF000000	#EndereÃ§os da memÃ³ria de vÃ­deo
 	li $t1,0xFF012C00
 	li $s2,0xFF000000
 	li $s1,0x88888888	# AZUL
@@ -92,8 +92,7 @@ loop4:								#	Printou a coluna da DIREITA
 ####################################################################							
 
 menu:
-	j JOGAR
-	li $v0, 5			#Lê a dificuldade do jogador
+	li $v0, 5			#LÃª a dificuldade do jogador
 	syscall
 	
 	li $v0, 1			#
