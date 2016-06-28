@@ -173,6 +173,8 @@ limpa:
     sb $t2,0($t4)
     addi $t4,$t4,1
     beq $t1,0xffffffff,fim
+    beq $t1,0x88888888,vacilo
+    beq $t1,0x00000000,vacilo
     lb $t2,0($s7)
     addi $s7,$s7,1
     beq $t2,0x64,direitat
@@ -258,3 +260,5 @@ reseta: addi $t4,$t4,-640
     j limpa
 reseta2:addi $s7,$s7,-640
     j limpa
+vacilo:    li $v0,10
+    syscall
