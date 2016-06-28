@@ -4,7 +4,7 @@ rabo: .byte 0:640
 ########################################################################
 JOGAR:
     li $s0,0xFF000000
-    li $t0,0xFF000000   #Endereços da memória de vídeo
+    li $t0,0xFF000000   #Endereï¿½os da memï¿½ria de vï¿½deo
     li $t1,0xFF012C00
     li $s2,0xFF000000
     li $s1,0x88888888   # AZUL
@@ -97,6 +97,22 @@ LOOP3a2: beq $s2,$t3,FORA3a2
     addi $s2,$s2,4
     j LOOP3a2
 FORA3a2: bne $t6,$zero,ficaa2
+
+	li $t3,0xFF007114
+    	li $s2,0xFF007108
+    	move $t7,$s2
+	li $s1,0xffffffff
+    li $t6,12
+ficaa2b: addi $t6,$t6,-1
+    add $t3,$t3,0x00000140
+    add $t7,$t7,0x00000140
+    move $s2,$t7
+LOOP3a2b: beq $s2,$t3,FORA3a2b
+    sw $s1,0($s2)
+    addi $s2,$s2,4
+    j LOOP3a2b
+FORA3a2b: bne $t6,$zero,ficaa2b
+
     li $t6,12
     li $s1,0x70707070
     move $t3,$s6
@@ -148,12 +164,15 @@ ECHO:   la $t1,0xFF100000
     beq $t2,0x61,esquerda
     beq $t2,0x41,esquerda
     beq $t2,0x77,cima
-    beq $t2,0x57,cima
+	beq $t2,0x57,cima
+    
     j fim
-limpa:  beq $t4, $t8,reseta
+limpa:
+	beq $t4, $t8,reseta
     beq $s7,$t8,reseta2
     sb $t2,0($t4)
     addi $t4,$t4,1
+    beq $t1,0xffffffff,fim
     lb $t2,0($s7)
     addi $s7,$s7,1
     beq $t2,0x64,direitat
@@ -165,12 +184,8 @@ limpa:  beq $t4, $t8,reseta
     beq $t2,0x77,cimat
     beq $t2,0x57,cimat
 fim:    eret
-direita:addi $a1,$a1,0xc
-    addi $a2,$a2,0xc
-    move $t3,$a1
-    move $t7,$a2
+loope:   li $s1,0x00000000 #parte dos 4 cria um novo quadrado azul
     li $t6,12
-    li $s1,0x00000000 #parte dos 4 cria um novo quadrado azul
 fica4:  addi $t6,$t6,-1
     add $t3,$t3,0x00000140
     add $t7,$t7,0x00000140
@@ -181,60 +196,52 @@ LOOP4:  beq $s2,$t3,FORA4
     j LOOP4
 FORA4:  bne $t6,$zero,fica4
     j limpa #volta pra ler outra tecla, os pra esquerda, cima e baixo sao parecidos
+direita:addi $a1,$a1,0xc
+    addi $a2,$a2,0xc
+    move $t3,$a1
+    move $t7,$a2
+    lw $t1,320($a2)  
+    j loope
 baixo:  addi $a1,$a1,0xf00
     addi $a2,$a2,0xf00
     move $t3,$a1
     move $t7,$a2
-    li $t6,12
-    li $s1,0x00000000
-fica8:  addi $t6,$t6,-1
-    add $t3,$t3,0x00000140
-    add $t7,$t7,0x00000140
-    move $s2,$t7
-LOOP8:  beq $s2,$t3,FORA8
-    sw $s1,0($s2)
-    addi $s2,$s2,4
-    j LOOP8
-FORA8:  bne $t6,$zero,fica8
-    j limpa
+    lw $t1,320($a2)  
+    j loope
 cima:   addi $a1,$a1,-0xf00
     addi $a2,$a2,-0xf00
     move $t3,$a1
     move $t7,$a2
-    li $t6,12
-    li $s1,0x00000000
-fica18: addi $t6,$t6,-1
-    add $t3,$t3,0x00000140
-    add $t7,$t7,0x00000140
-    move $s2,$t7
-LOOP18: beq $s2,$t3,FORA18
-    sw $s1,0($s2)
-    addi $s2,$s2,4
-    j LOOP18
-FORA18: bne $t6,$zero,fica18
-    j limpa
+    lw $t1,320($a2)  
+    j loope
 esquerda:addi $a1,$a1,-0xc
     addi $a2,$a2,-0xc
     move $t3,$a1
     move $t7,$a2
-    li $t6,12
-    li $s1,0x00000000
-fica14: addi $t6,$t6,-1
-    add $t3,$t3,0x00000140
-    add $t7,$t7,0x00000140
-    move $s2,$t7
-LOOP14: beq $s2,$t3,FORA14
-    sw $s1,0($s2)
-    addi $s2,$s2,4
-    j LOOP14
-FORA14: bne $t6,$zero,fica14
-    j limpa
+    lw $t1,320($a2)  
+    j loope
     ######################
 direitat:addi $s6,$s6,0xc
     addi $v1,$v1,0xc
     move $t3,$s6
     move $t7,$v1
-    li $t6,12
+j loope2
+baixot: addi $s6,$s6,0xf00
+    addi $v1,$v1,0xf00
+    move $t3,$s6
+    move $t7,$v1
+j loope2
+cimat:  addi $s6,$s6,-0xf00
+    addi $v1,$v1,-0xf00
+    move $t3,$s6
+    move $t7,$v1
+j loope2
+esquerdat:addi $s6,$s6,-0xc
+    addi $v1,$v1,-0xc
+    move $t3,$s6
+    move $t7,$v1
+j loope2
+loope2:       li $t6,12
     li $s1,0x70707070 #parte dos 4 cria um novo quadrado azul
 fica4t: addi $t6,$t6,-1
     add $t3,$t3,0x00000140
@@ -245,55 +252,8 @@ LOOP4t:     beq $s2,$t3,FORA4t
     addi $s2,$s2,4
     j LOOP4t
 FORA4t: bne $t6,$zero,fica4t
-    j fim #volta pra ler outra tecla, os pra esquerda, cima e baixo sao parecidos
-baixot: addi $s6,$s6,0xf00
-    addi $v1,$v1,0xf00
-    move $t3,$s6
-    move $t7,$v1
-    li $t6,12
-    li $s1,0x70707070
-fica8t: addi $t6,$t6,-1
-    add $t3,$t3,0x00000140
-    add $t7,$t7,0x00000140
-    move $s2,$t7
-LOOP8t:     beq $s2,$t3,FORA8t
-    sw $s1,0($s2)
-    addi $s2,$s2,4
-    j LOOP8t
-FORA8t: bne $t6,$zero,fica8t
-    j fim
-cimat:  addi $s6,$s6,-0xf00
-    addi $v1,$v1,-0xf00
-    move $t3,$s6
-    move $t7,$v1
-    li $t6,12
-    li $s1,0x70707070
-ficv08t:    addi $t6,$t6,-1
-    add $t3,$t3,0x00000140
-    add $t7,$t7,0x00000140
-    move $s2,$t7
-LOOP18t: beq $s2,$t3,FORv08t
-    sw $s1,0($s2)
-    addi $s2,$s2,4
-    j LOOP18t
-FORv08t:    bne $t6,$zero,ficv08t
-    j fim
-esquerdat:addi $s6,$s6,-0xc
-    addi $v1,$v1,-0xc
-    move $t3,$s6
-    move $t7,$v1
-    li $t6,12
-    li $s1,0x70707070
-ficv04t:    addi $t6,$t6,-1
-    add $t3,$t3,0x00000140
-    add $t7,$t7,0x00000140
-    move $s2,$t7
-LOOP14t:    beq $s2,$t3,FORv04t
-    sw $s1,0($s2)
-    addi $s2,$s2,4
-    j LOOP14t
-FORv04t:    bne $t6,$zero,ficv04t
-    j fim
+j fim
+
 reseta: addi $t4,$t4,-640
     j limpa
 reseta2:addi $s7,$s7,-640
