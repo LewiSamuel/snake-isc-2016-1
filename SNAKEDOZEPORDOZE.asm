@@ -131,15 +131,11 @@ FIM:    # Leitura do teclado e echo na tela
     li $t0,2
     sw $t0,0($t1)   # Habilita interrup??o do teclado
     li $s0,0
-CONTA:  
-    j CONTA
-
-
-.ktext
-ECHO:   la $t1,0xFF100000
-    lw $t2,4($t1)  # Tecla lida
-    
-    sub $t0, $t5, $t2
+CONTA:
+li $v0,32
+li $a0,200
+syscall
+sub $t0, $t5, $t2
     
     beq $t0, -3, fim
     beq $t0, 3, fim
@@ -168,24 +164,24 @@ ECHO:   la $t1,0xFF100000
     
     j fim
 limpa:
-	beq $t4, $t8,reseta
+    beq $t4, $t8,reseta
     beq $s7,$t8,reseta2
     sb $t2,0($t4)
     addi $t4,$t4,1
     beq $t1,0xffffffff,fim
     beq $t1,0x88888888,vacilo
     beq $t1,0x00000000,vacilo
-    lb $t2,0($s7)
+    lb $ra,0($s7)
     addi $s7,$s7,1
-    beq $t2,0x64,direitat
-    beq $t2,0x44,direitat
-    beq $t2,0x73,baixot
-    beq $t2,0x53,baixot
-    beq $t2,0x61,esquerdat
-    beq $t2,0x41,esquerdat
-    beq $t2,0x77,cimat
-    beq $t2,0x57,cimat
-fim:    eret
+    beq $ra,0x64,direitat
+    beq $ra,0x44,direitat
+    beq $ra,0x73,baixot
+    beq $ra,0x53,baixot
+    beq $ra,0x61,esquerdat
+    beq $ra,0x41,esquerdat
+    beq $ra,0x77,cimat
+    beq $ra,0x57,cimat
+fim:    j CONTA
 loope:   li $s1,0x00000000 #parte dos 4 cria um novo quadrado azul
     li $t6,12
 fica4:  addi $t6,$t6,-1
@@ -264,3 +260,12 @@ reseta2:addi $s7,$s7,-640
     j limpa
 vacilo:    li $v0,10
     syscall
+
+    j CONTA
+
+
+.ktext
+ECHO:   la $t1,0xFF100000
+    lw $t2,4($t1)  # Tecla lida
+    eret
+    
