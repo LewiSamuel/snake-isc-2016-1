@@ -131,11 +131,12 @@ FIM:    # Leitura do teclado e echo na tela
     li $t0,2
     sw $t0,0($t1)   # Habilita interrup??o do teclado
     li $s0,0
+    li $t2,0x44
 CONTA:
 li $v0,32
 li $a0,200
 syscall
-sub $t0, $t5, $t2
+    sub $t0, $t5, $t2
     
     beq $t0, -3, fim
     beq $t0, 3, fim
@@ -267,5 +268,25 @@ vacilo:    li $v0,10
 .ktext
 ECHO:   la $t1,0xFF100000
     lw $t2,4($t1)  # Tecla lida
+    
+    sub $t0, $t5, $t2
+    
+    beq $t0, -3, volta
+    beq $t0, 3, volta
+    beq $t0, 35, volta
+    beq $t0, -35, volta
+    beq $t0, -29, volta
+    beq $t0, 29, volta
+        
+    beq $t0, 4, volta
+    beq $t0, -4, volta
+    beq $t0, 28, volta
+    beq $t0, -28, volta
+    beq $t0, 36, volta
+    beq $t0, -36, volta
+    eret
+volta:
+    move $t2, $t5
+    
     eret
     
