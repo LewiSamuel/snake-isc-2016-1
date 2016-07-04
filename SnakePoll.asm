@@ -128,10 +128,13 @@ LOOP3a3: beq $s2,$t3,FORA3a3
     j LOOP3a3
 FORA3a3: bne $t6,$zero,ficaa3
 	li $t2,0x44
-CONTA:	la $t1,0xFF100000
+CONTA:	li $v0,32
+	li $a0,50
+	syscall
+	la $t1,0xFF100000
 	lw $t0,0($t1)
 	andi $t0,$t0,0x0001		# Le bit de Controle Teclado
-   	beq $t0,$zero,PULA   	   	# Se não há tecla pressionada PULA
+   	beq $t0,$zero,PULA   	   	# Se nï¿½o hï¿½ tecla pressionada PULA
   	lw $t2,4($t1)  		# Tecla lida
   	    sub $t0, $t5, $t2
     
@@ -164,11 +167,7 @@ fim2:   j PULA
 fim3:   move $t2,$t5
 	j birl2
 PULA:
-
-	li $v0,32
-	li $a0,100
-	syscall
-  
+ 
     move $t5, $t2
             
     beq $t2,0x64,direita
