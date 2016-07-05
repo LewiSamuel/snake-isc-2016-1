@@ -1,7 +1,7 @@
 .data 
     rabo: .byte 0:1200
     comida: .word 0,1
-    STR: .asciiz "GAMEOVER  "
+    STR: .asciiz " GAMEOVER  GAMEOVER  GAMEOVER  GAMEOVER "
     .text
     ########################################################################
 JOGAR:
@@ -365,14 +365,12 @@ loop:
 	syscall
 	addi $t0,$t0,1
 	addi $t3,$t3,1
-	beq $t3,120,acabou
-	beq $t0,4,proxima
-j loop
-proxima:
+	beq $t3,30,acabou
 	addi $s2,$s2,8
 	move $a2,$s2
+	addi $s1,$s1,3
 	move $a1,$s1
-	addi $t0,$t0,-4
+	addi $t0,$t0,-1
 	j loop
 acabou: li $v0,10
 	syscall
