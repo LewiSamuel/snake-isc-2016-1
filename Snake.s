@@ -1,9 +1,9 @@
 #########################################################
 #  Jogo Snake                                           #
 #  ISC Jul 2016				                #
-# Luis Felipe Braga Gebrim Silva Matrícula 1 16/0071569 #
-# Leonardo Maffei da Silva       Matrícula 2 16/0033811 #
-# José Marcos da Silva Leite     Matrícula 3 15/0038810 #
+# Luis Felipe Braga Gebrim Silva MatrÃ­cula 1 16/0071569 #
+# Leonardo Maffei da Silva       MatrÃ­cula 2 16/0033811 #
+# JosÃ© Marcos da Silva Leite     MatrÃ­cula 3 15/0038810 #
 #########################################################
 .data 
     pontos: .word -10
@@ -167,11 +167,11 @@ LOOP23:	beq $t0,$s1, FIM23
 	j LOOP23
 FIM23:
 werl:
-	    	la $s0,NUM
+	la $s0,NUM
 	lw $s1,0($s0)
 	la $s0,NOTAS
 	li $t0,0
-	li $a2,68	# instrumento
+	li $a2,5	# instrumento
 	li $a3,25	# volume
 
 LOOP22:	beq $t0,$s1, FIM22
