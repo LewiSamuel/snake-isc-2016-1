@@ -1,6 +1,6 @@
 #########################################################
 #  Jogo Snake                                           #
-#  ISC Jul 2016				                #
+#  Introcução a Sistemas Ccomputacionais   1/2016       #
 # Luis Felipe Braga Gebrim Silva Matrícula 1 16/0071569 #
 # Leonardo Maffei da Silva       Matrícula 2 16/0033811 #
 # José Marcos da Silva Leite     Matrícula 3 15/0038810 #
@@ -11,6 +11,11 @@
     comida: .word 0,1
     velocidade: .word 100
     STR: .asciiz " GAMEOVER  GAMEOVER  GAMEOVER  GAMEOVER "
+    melhor: .asciiz "O melhor e: "
+    buffer: .word 0:6
+    name: .asciiz "ranking.bin"
+    input: .word 0
+    
     STR2: .asciiz "Pontuacao: "
     nomedocara: .word 0:30
     botaNome: .asciiz "Bota o nome ae"
@@ -483,5 +488,90 @@ loop:
     move $a1,$s1
     addi $t0,$t0,-1
     j loop
-acabou: li $v0,10
+acabou:
+	
+	li   $v0, 13    # abre o arquivo pra ler
+	la   $a0, name
+	li   $a1, 0
+	li   $a2, 0
+	syscall
+	move $s6, $v0
+
+	li $t1 0
+	li   $v0, 14
+	move $a0, $s6
+	la   $a1, buffer
+	li   $a2, 20
+	syscall
+	
+	li $v0, 14
+	la   $a1, input
+	
+	li $a2, 4
+	syscall
+	
+	li   $v0, 16
+	move $a0, $s6
+	syscall         
+	
+	la $t1, pontos
+	lw $t0, ($t1)
+	
+	bgt $t0, $v0, GRAVANOVO
+	move $t2, $v0
+	
+	
+	la $a0, melhor 
+    	li $v0,4   
+    	syscall
+	la $a0,buffer   
+    	li $v0,4   
+    	syscall
+    	la $a0,STR2   
+    	li $v0,4   
+    	syscall
+    	move $a0, $t2
+    	li $v0, 1
+    	syscall
+    	
+	j acabamesmo	
+
+GRAVANOVO:
+	la $a0,melhor 
+    	li $v0,4   
+    	syscall
+	la $a0,nomedocara   
+    	li $v0,4   
+    	syscall
+    	la $a0,STR2   
+    	li $v0,4   
+    	syscall
+    	move $a0, $t0
+    	li $v0, 1
+    	syscall
+    	
+
+	li   $v0, 13
+	la   $a0, name
+	li   $a1, 1
+	li   $a2, 0
+	syscall
+	move $s6, $v0
+	
+	li $t2, 0
+        move $a0, $s6
+        la $a1, nomedocara
+        li $a2, 20
+        li $v0, 15
+        syscall
+        
+        move $a0, $s6
+        la $a1, pontos
+        li $a2, 4
+        li $v0, 15
+        syscall
+
+acabamesmo:
+
+    li $v0,10
     syscall
